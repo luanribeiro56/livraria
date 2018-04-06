@@ -73,7 +73,7 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li>
-                        <a href="../console/"><i class="fa fa-fw fa-edit"></i> Consoles</a>
+                        <a href="../categoria/"><i class="fa fa-fw fa-edit"></i> Categoria</a>
                     </li>
                     <li>
                         <a href="../joystick/"><i class="fa fa-fw fa-bar-chart-o"></i> Joysticks</a>
