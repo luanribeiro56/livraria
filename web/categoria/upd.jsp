@@ -1,23 +1,20 @@
 
 <%@page import="java.math.BigDecimal"%>
-<%@page import="modelo.Console"%>
-<%@page import="dao.ConsoleDAO"%>
+<%@page import="modelo.Categoria"%>
+<%@page import="dao.CategoriaDAO"%>
 <%@include file="../cabecalho.jsp" %>
 <%
 String msg ="";
 String classe = "";
     
-    ConsoleDAO dao = new ConsoleDAO();
-    Console obj = new Console();
+    CategoriaDAO dao = new CategoriaDAO();
+    Categoria obj = new Categoria();
     //verifica se é postm ou seja, quer alterar
     if(request.getMethod().equals("POST")){
         
         //popular com oq ele digitou no form
-        obj.setNumSerie(Integer.parseInt(request.getParameter("txtCodigo")));
+        obj.setId(Integer.parseInt(request.getParameter("txtID")));
         obj.setNome(request.getParameter("txtNome"));
-        obj.setMarca(request.getParameter("txtMarca"));
-        BigDecimal bd = new BigDecimal(request.getParameter("txtValor"));
-        obj.setValor(bd);
         
         Boolean resultado = dao.alterar(obj);
         
@@ -32,13 +29,13 @@ String classe = "";
         
     }else{
         //e GET
-        if(request.getParameter("codigo") == null){
+        if(request.getParameter("Id") == null){
             response.sendRedirect("index.jsp");
             return;
         }
         
-        dao = new ConsoleDAO();
-        obj = dao.buscarPorChavePrimaria(Integer.parseInt(request.getParameter("codigo")));
+        dao = new CategoriaDAO();
+        obj = dao.buscarPorChavePrimaria(Integer.parseInt(request.getParameter("Id")));
         
         if(obj == null){
             response.sendRedirect("index.jsp");
@@ -66,7 +63,7 @@ String classe = "";
 <div class="row">
     <div class="panel panel-default">
         <div class="panel-heading">
-            Console
+            Categoria
         </div>
         <div class="panel-body">
 
@@ -79,20 +76,12 @@ String classe = "";
 
                     <div class="form-group">
                         <label>Código</label>
-                        <input class="form-control" type="text" name="txtCodigo" readonly value="<%=obj.getNumSerie()%>"/>
+                        <input class="form-control" type="text" name="txtID" readonly value="<%=obj.getId()%>"/>
                     </div>
                     
                     <div class="form-group">
                         <label>Nome</label>
                         <input class="form-control" type="text" name="txtNome" required value="<%=obj.getNome() %>" />
-                    </div>
-                    <div class="form-group">
-                        <label>Marca</label>
-                        <input class="form-control" type="text" name="txtMarca" required value="<%=obj.getMarca()%>" />
-                    </div>
-                    <div class="form-group">
-                        <label>Valor</label>
-                        <input class="form-control" type="number" name="txtValor" required value="<%=obj.getValor()%>" />
                     </div>
 
 

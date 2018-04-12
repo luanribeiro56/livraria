@@ -1,12 +1,12 @@
 <%@page import="java.util.List"%>
-<%@page import="modelo.Categoria"%>
-<%@page import="dao.CategoriaDAO"%>
+<%@page import="modelo.Autor"%>
+<%@page import="dao.AutorDAO"%>
 <%@include file="../cabecalho.jsp" %>
 
 <% 
     
-    CategoriaDAO dao = new CategoriaDAO();
-    List<Categoria> lista;
+    AutorDAO dao = new AutorDAO();
+    List<Autor> lista;
     
     if (request.getParameter("txtFiltro") != null) {
         lista = dao.listar(request.getParameter("txtFiltro"));
@@ -14,8 +14,8 @@
     } else{ 
    
     //verifico se é excluir
-        if(request.getParameter("codigo") != null){
-            Categoria obj = dao.buscarPorChavePrimaria(Integer.parseInt(request.getParameter("codigo")));
+        if(request.getParameter("Id") != null){
+            Autor obj = dao.buscarPorChavePrimaria(Integer.parseInt(request.getParameter("Id")));
             if(obj != null){
                 dao.excluir(obj);
             }
@@ -31,7 +31,7 @@
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">
-            Gerenciamento de Categorias
+            Gerenciamento de Autors
 
         </h1>
         <ol class="breadcrumb">
@@ -73,19 +73,23 @@
                     <tr>
                         <th>ID</th>
                         <th>Nome</th>
-                        
-                        <th >Ações</th>
+                        <th >Sexo</th>
+                        <th >Nacionalidade</th>
+                        <th >Foto</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <%for(Categoria item: lista)
+                    <%for(Autor item: lista)
                     {
                     %>
                     <tr>
                         <td><%=item.getId()%></td>
                         <td><%=item.getNome() %></td>
+                        <td><%=item.getSexo()%></td>
+                        <td><%=item.getNacionalidade()%></td>
+                        <td><img src = "../arquivo<%=item.getFoto()%>" width="100" height = "80" /></td>
                         <td><a href="upd.jsp?Id=<%=item.getId()%>" class="btn  btn-primary btn-sm">Alterar</a>
-                            <button class="btn  btn-danger btn-sm" data-toggle="modal" data-target="#myModal" onclick="codigo=<%=item.getId()%>">Excluir</button>  
+                            <button class="btn  btn-danger btn-sm" data-toggle="modal" data-target="#myModal" onclick="Id=<%=item.getId()%>">Excluir</button>  
                         </td>
                     </tr>
                     <% } %>

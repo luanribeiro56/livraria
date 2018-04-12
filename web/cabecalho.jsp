@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Sistema de Comércio Eletrônico</title>
+    <title>Livraria do Luan</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -76,7 +76,7 @@
                         <a href="../categoria/"><i class="fa fa-fw fa-edit"></i> Categoria</a>
                     </li>
                     <li>
-                        <a href="../joystick/"><i class="fa fa-fw fa-bar-chart-o"></i> Joysticks</a>
+                        <a href="../autor/"><i class="fa fa-fw fa-bar-chart-o"></i> Autor</a>
                     </li>
                     
                 </ul>
