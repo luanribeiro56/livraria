@@ -7,7 +7,6 @@ package modelo;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,7 +17,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -50,9 +48,6 @@ public class Livro implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date dataPublicacao;
     @Basic(optional = false)
-    @Column(name = "categoria")
-    private int categoria;
-    @Basic(optional = false)
     @Column(name = "sinopse")
     private String sinopse;
     @Column(name = "img1")
@@ -61,11 +56,12 @@ public class Livro implements Serializable {
     private String img2;
     @Column(name = "img3")
     private String img3;
+    @JoinColumn(name = "categoria", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Categoria categoria;
     @JoinColumn(name = "editora", referencedColumnName = "cnpj")
     @ManyToOne(optional = false)
     private Editora editora;
-    @OneToMany(mappedBy = "livro")
-    private List<AutorLivro> autorLivroList;
 
     public Livro() {
     }
@@ -74,12 +70,11 @@ public class Livro implements Serializable {
         this.id = id;
     }
 
-    public Livro(Integer id, String nome, float preco, Date dataPublicacao, int categoria, String sinopse) {
+    public Livro(Integer id, String nome, float preco, Date dataPublicacao, String sinopse) {
         this.id = id;
         this.nome = nome;
         this.preco = preco;
         this.dataPublicacao = dataPublicacao;
-        this.categoria = categoria;
         this.sinopse = sinopse;
     }
 
@@ -115,14 +110,6 @@ public class Livro implements Serializable {
         this.dataPublicacao = dataPublicacao;
     }
 
-    public int getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(int categoria) {
-        this.categoria = categoria;
-    }
-
     public String getSinopse() {
         return sinopse;
     }
@@ -155,20 +142,20 @@ public class Livro implements Serializable {
         this.img3 = img3;
     }
 
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
     public Editora getEditora() {
         return editora;
     }
 
     public void setEditora(Editora editora) {
         this.editora = editora;
-    }
-
-    public List<AutorLivro> getAutorLivroList() {
-        return autorLivroList;
-    }
-
-    public void setAutorLivroList(List<AutorLivro> autorLivroList) {
-        this.autorLivroList = autorLivroList;
     }
 
     @Override

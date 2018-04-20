@@ -6,7 +6,9 @@
 package modelo;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -23,9 +26,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "categoria")
 @NamedQueries({
-    @NamedQuery(name = "Categoria.findAll", query = "SELECT c FROM Categoria c"),
-    @NamedQuery(name = "Categoria.findFilter", query = "SELECT c FROM Categoria c WHERE c.nome like :filtro")})
+    @NamedQuery(name = "Categoria.findAll", query = "SELECT c FROM Categoria c")})
 public class Categoria implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria")
+    private List<Livro> livroList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -82,6 +87,14 @@ public class Categoria implements Serializable {
     @Override
     public String toString() {
         return "modelo.Categoria[ id=" + id + " ]";
+    }
+
+    public List<Livro> getLivroList() {
+        return livroList;
+    }
+
+    public void setLivroList(List<Livro> livroList) {
+        this.livroList = livroList;
     }
     
 }

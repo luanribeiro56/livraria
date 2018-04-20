@@ -1,6 +1,6 @@
 <%@page import="java.math.BigDecimal"%>
-<%@page import="dao.AutorDAO"%>
-<%@page import="modelo.Autor"%>
+<%@page import="dao.EditoraDAO"%>
+<%@page import="modelo.Editora"%>
 <%@page import="java.util.List"%>
 
 <%@include file="../cabecalho.jsp" %>
@@ -8,25 +8,28 @@
     String msg = "";
     String classe = "";
     
-    Autor obj = new Autor();
-    AutorDAO dao = new AutorDAO();
+    Editora obj = new Editora();
+    EditoraDAO dao = new EditoraDAO();
     
-    if (request.getParameter("txtNome") != null && request.getParameter("txtSexo") != null && request.getParameter("txtNacionalidade") != null) 
+    if (request.getParameter("txtNome") != null && request.getParameter("txtCnpj") != null) 
     {
         obj.setNome(request.getParameter("txtNome"));
-        obj.setSexo(request.getParameter("txtSexo").charAt(0));
-        obj.setNacionalidade(request.getParameter("txtNacionalidade"));
-        obj.setFoto(request.getParameter("txtFoto"));   
+        obj.setCnpj(request.getParameter("txtCnpj"));
+        obj.setLogo(request.getParameter("txtLogo"));
+    
         Boolean resultado = dao.incluir(obj);
         if (resultado) {
-            msg = "Registro cadastrado com sucesso";
-            classe = "alert-success";
+        msg = "Registro cadastrado com sucesso";
+        classe = "alert-success";
         } else {
-            msg = "Não foi possível cadastrar";
-            classe = "alert-danger";
-        }
-    } 
+        msg = "Não foi possível cadastrar";
+        classe = "alert-danger";
+    }
+    }
     
+   
+    
+    dao.fecharConexao();
 
 %>
 <div class="row">
@@ -49,7 +52,7 @@
 <div class="row">
     <div class="panel panel-default">
         <div class="panel-heading">
-            Autors
+            Editoras
         </div>
         <div class="panel-body">
 
@@ -65,19 +68,12 @@
                         <input class="form-control" type="text"  name="txtNome"  required />
                     </div>
                     <div class="form-group">
-                        <label>Sexo: </label>
-                        <select name ="txtSexo">
-                            <option value="M">Masculino</option>
-                            <option value="F">Feminino</option>
-                        </select>
+                        <label>CNPJ: </label>
+                        <input class="form-control" type="text"  name="txtCnpj"  required />
                     </div>
                     <div class="form-group">
-                        <label>Nacionalidade: </label>
-                        <input class="form-control" type="text"  name="txtNacionalidade"  required />
-                    </div>
-                    <div class="form-group">
-                        <label>Foto: </label>
-                        <input class="form-control" type="file"  name="txtFoto"  required />
+                        <label>Logo: </label>
+                        <input class="" type="file"  name="txtLogo"  required />
                     </div>
 
                     <button class="btn btn-primary btn-sm" type="submit">Salvar</button>
