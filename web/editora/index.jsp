@@ -1,3 +1,5 @@
+<%@page import="modelo.Livro"%>
+<%@page import="dao.LivroDAO"%>
 <%@page import="java.util.List"%>
 <%@page import="modelo.Editora"%>
 <%@page import="dao.EditoraDAO"%>
@@ -6,8 +8,7 @@
 <% 
     
     EditoraDAO dao = new EditoraDAO();
-    List<Editora> lista;
-    
+    List<Editora> lista;  
     if (request.getParameter("txtFiltro") != null) {
         lista = dao.listar(request.getParameter("txtFiltro"));
         
@@ -84,11 +85,10 @@
                     <tr>
                         <td><%=item.getCnpj()%></td>
                         <td><%=item.getNome() %></td>
-                        <td><%=item.getLogo()%></td>
-                        <td><%=item.getLivroList()%></td>
                         <td><img src = "../arquivos/<%=item.getLogo()%>" width="100" height = "80" /></td>
-                        <td><a href="upd.jsp?Id=<%=item.getCnpj()%>" class="btn  btn-primary btn-sm">Alterar</a>
-                            <button class="btn  btn-danger btn-sm" data-toggle="modal" data-target="#myModal" onclick="cnpj=<%=item.getCnpj()%>">Excluir</button>  
+                        <td><%=item.getLivroList()%></td>
+                        <td><a href="upd.jsp?Cnpj=<%=item.getCnpj()%>" class="btn  btn-primary btn-sm">Alterar</a>
+                            <button class="btn  btn-danger btn-sm" data-toggle="modal" data-target="#myModal" onclick="id=<%=item.getCnpj()%>">Excluir</button>  
                         </td>
                     </tr>
                     <% } %>

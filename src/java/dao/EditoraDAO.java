@@ -12,7 +12,7 @@ import modelo.Editora;
  *
  * @author Luan
  */
-public class EditoraDAO extends GenericDAO<Editora, Integer>{
+   public class EditoraDAO extends GenericDAO<Editora, String>{
     
     public EditoraDAO()
     {

@@ -78,6 +78,12 @@
                     <li>
                         <a href="../autor/"><i class="fa fa-fw fa-bar-chart-o"></i> Autor</a>
                     </li>
+                    <li>
+                        <a href="../editora/"><i class="fa fa-fw fa-bar-chart-o"></i> Editora</a>
+                    </li>
+                    <li>
+                        <a href="../livro/"><i class="fa fa-fw fa-bar-chart-o"></i> Livro</a>
+                    </li>
                     
                 </ul>
             </div>

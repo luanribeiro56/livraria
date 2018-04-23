@@ -1,34 +1,35 @@
-<%@page import="dao.EditoraDAO"%>
-<%@page import="modelo.Editora"%>
-<%@page import="dao.CategoriaDAO"%>
-<%@page import="dao.CategoriaDAO"%>
-<%@page import="modelo.Categoria"%>
-<%@page import="util.StormData"%>
-'<%@page import="java.math.BigDecimal"%>
-<%@page import="dao. LivroDAO"%>
-<%@page import="modelo. Livro"%>
-<%@page import="java.util.List"%>
 
+<%@page import="util.StormData"%>
+<%@page import="modelo.Editora"%>
+<%@page import="dao.EditoraDAO"%>
+<%@page import="java.util.List"%>
+<%@page import="modelo.Categoria"%>
+<%@page import="dao.CategoriaDAO"%>
+<%@page import="java.math.BigDecimal"%>
+<%@page import="modelo.Livro"%>
+<%@page import="dao.LivroDAO"%>
 <%@include file="../cabecalho.jsp" %>
 <%
-    String msg = "";
-    String classe = "";
+String msg ="";
+String classe = "";
     
-     Livro obj = new  Livro();
-     LivroDAO dao = new  LivroDAO();
-  
-     CategoriaDAO cdao = new CategoriaDAO();
-     List<Categoria> clistar = cdao.listar();
-     Categoria c = new Categoria();
-     
-     EditoraDAO edao = new EditoraDAO();
-     List<Editora> elistar = edao.listar();
-     Editora e = new Editora();
-     
-     
-     
-    if (request.getParameter("txtNome") != null && request.getParameter("txtSexo") != null && request.getParameter("txtNacionalidade") != null && request.getParameter("txtCategoria") != null && request.getParameter("txtEditora") != null) 
-    {
+    LivroDAO dao = new LivroDAO();
+    Livro obj = new Livro();
+    
+    
+    CategoriaDAO cdao = new CategoriaDAO();
+    List<Categoria> clistar = cdao.listar();
+    Categoria c = new Categoria();
+
+    EditoraDAO edao = new EditoraDAO();
+    List<Editora> elistar = edao.listar();
+    Editora e = new Editora();
+    
+    //verifica se é postm ou seja, quer alterar
+    if(request.getMethod().equals("POST")){
+        
+        //popular com oq ele digitou no form
+        obj.setId(Integer.parseInt(request.getParameter("txtID")));
         obj.setNome(request.getParameter("txtNome"));
         obj.setPreco(Float.parseFloat(request.getParameter("txtPreco")));
         obj.setDataPublicacao(StormData.formata(request.getParameter("txtData")));
@@ -40,18 +41,32 @@
         obj.setImg1(request.getParameter("txtFoto"));
         obj.setImg2(request.getParameter("txtFoto2"));
         obj.setImg3(request.getParameter("txtFoto3"));
-        Boolean resultado = dao.incluir(obj);
-        if (resultado) {
-            msg = "Registro cadastrado com sucesso";
+        Boolean resultado = dao.alterar(obj);
+        
+        if(resultado){
+            msg = "Registro alterado com sucesso";
             classe = "alert-success";
-        } else {
-            msg = "Não foi possível cadastrar";
+        }
+        else{
+            msg = "Não foi possível alterar";
             classe = "alert-danger";
         }
-    } 
-    dao.fecharConexao();
-    
-
+        
+    }else{
+        //e GET
+        if(request.getParameter("Id") == null){
+            response.sendRedirect("index.jsp");
+            return;
+        }
+        
+        dao = new LivroDAO();
+        obj = dao.buscarPorChavePrimaria(Integer.parseInt(request.getParameter("Id")));
+        
+        if(obj == null){
+            response.sendRedirect("index.jsp");
+            return;
+        } 
+    }
 %>
 <div class="row">
     <div class="col-lg-12">
@@ -64,7 +79,7 @@
                 <i class="fa fa-dashboard"></i>  <a href="index.jsp">Área Administrativa</a>
             </li>
             <li class="active">
-                <i class="fa fa-file"></i> Aqui vai o conteúdo de apresentação 
+                <i class="fa fa-file"></i> Aqui vai o conteúdo de apresentação
             </li>
         </ol>
     </div>
@@ -73,7 +88,7 @@
 <div class="row">
     <div class="panel panel-default">
         <div class="panel-heading">
-             Livros
+            Livro
         </div>
         <div class="panel-body">
 
@@ -83,7 +98,10 @@
             <form action="../UploadWS" method="post" enctype="multipart/form-data">
 
                 <div class="col-lg-6">
-
+                    <div class="form-group">
+                        <label>Código</label>
+                        <input class="form-control" type="text" name="txtID" readonly value="<%=obj.getId()%>"/>
+                    </div>
                     <div class="form-group">
                         <label>Nome</label>
                         <input class="form-control" type="text"  name="txtNome"  required />
@@ -142,8 +160,10 @@
                         <label>Foto 3: </label>
                         <input class="form-control" type="file"  name="txtFoto3"  required />
                     </div>
-                    <button class="btn btn-primary btn-sm" type="submit">Salvar</button>
 
+
+                <button class="btn btn-primary btn-sm" type="submit">Salvar</button>
+                
             </form>
 
         </div>
@@ -151,5 +171,5 @@
 
     </div>
 </div>
-<!-- 1/.row -->
+<!-- /.row -->
 <%@include file="../rodape.jsp" %>
