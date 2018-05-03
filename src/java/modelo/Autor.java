@@ -27,7 +27,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "autor")
 @NamedQueries({
-    @NamedQuery(name = "Autor.findAll", query = "SELECT a FROM Autor a")})
+    @NamedQuery(name = "Autor.findAll", query = "SELECT a FROM Autor a"),
+    @NamedQuery(name = "Autor.findFilter", query = "SELECT a FROM Autor a WHERE a.nome=:filtro")})
 public class Autor implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -134,7 +135,7 @@ public class Autor implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.Autor[ id=" + id + " ]";
+        return nome;
     }
     
 }

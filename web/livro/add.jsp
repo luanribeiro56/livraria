@@ -28,11 +28,12 @@
      List<Editora> elistar = edao.listar();
      Editora e = new Editora();
      
-    AutorDAO adao = new AutorDAO();
+     AutorDAO adao = new AutorDAO();
+     List<Autor> alistar = adao.listar();
      
     if(request.getMethod().equals("POST")){
         //pego uma lista de autores(com mesmo name)
-        String[] autoresid = request.getParameterValues("autores");
+        String[] autoresid = request.getParameter("autores").split(";");
         //popular o livro
         if (request.getParameter("txtNome") != null && request.getParameter("txtPreco") != null && request.getParameter("txtData") != null && request.getParameter("txtCategoria") != null && request.getParameter("txtEditora") != null) 
         {
@@ -63,6 +64,7 @@
                 classe = "alert-danger";
             }
         }
+    }
      
      
      
@@ -148,17 +150,27 @@
                          %>
                         </select>
                     </div>
+                    </div>
+                        <div class="form-group">
+                        <label> Autores: </label>
+                        <%
+                           for (Autor item : alistar) {
+                               
+                         %>
+                         <input type="checkbox" name="autores"  required value = "<%=item.getId()%>"><%=item.getNome()%>
+                         <%}%>
+                    </div>
                     <div class="form-group">
                         <label>Foto: </label>
-                        <input class="form-control" type="file"  name="txtFoto"  required />
+                        <input class="" type="file"  name="txtFoto"  required />
                     </div>
                     <div class="form-group">
                         <label>Foto 2: </label>
-                        <input class="form-control" type="file"  name="txtFoto2"  required />
+                        <input class="" type="file"  name="txtFoto2"  required />
                     </div>
                     <div class="form-group">
                         <label>Foto 3: </label>
-                        <input class="form-control" type="file"  name="txtFoto3"  required />
+                        <input class="" type="file"  name="txtFoto3"  required />
                     </div>
                     <button class="btn btn-primary btn-sm" type="submit">Salvar</button>
 

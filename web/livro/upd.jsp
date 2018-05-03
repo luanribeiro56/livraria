@@ -1,4 +1,7 @@
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="dao.AutorDAO"%>
+<%@page import="modelo.Autor"%>
 <%@page import="util.StormData"%>
 <%@page import="modelo.Editora"%>
 <%@page import="dao.EditoraDAO"%>
@@ -25,32 +28,43 @@ String classe = "";
     List<Editora> elistar = edao.listar();
     Editora e = new Editora();
     
+    AutorDAO adao = new AutorDAO();
+    List<Autor> alistar = adao.listar();
+    
     //verifica se é postm ou seja, quer alterar
-    if(request.getMethod().equals("POST")){
-        
-        //popular com oq ele digitou no form
-        obj.setId(Integer.parseInt(request.getParameter("txtID")));
-        obj.setNome(request.getParameter("txtNome"));
-        obj.setPreco(Float.parseFloat(request.getParameter("txtPreco")));
-        obj.setDataPublicacao(StormData.formata(request.getParameter("txtData")));
-        obj.setSinopse(request.getParameter("txtSinopse"));
-        c.setId(Integer.parseInt(request.getParameter("txtCategoria")));
-        e.setCnpj(request.getParameter("txtEditora"));
-        obj.setCategoria(c);
-        obj.setEditora(e);
-        obj.setImg1(request.getParameter("txtFoto"));
-        obj.setImg2(request.getParameter("txtFoto2"));
-        obj.setImg3(request.getParameter("txtFoto3"));
-        Boolean resultado = dao.alterar(obj);
-        
-        if(resultado){
+   if(request.getMethod().equals("POST")){
+        //pego uma lista de autores(com mesmo name)
+        String[] autoresid = request.getParameter("autores").split(";");
+        //popular o livro
+        if (request.getParameter("txtNome") != null && request.getParameter("txtPreco") != null && request.getParameter("txtData") != null && request.getParameter("txtCategoria") != null && request.getParameter("txtEditora") != null) 
+            obj.setId(Integer.parseInt(request.getParameter("txtID")));
+            obj.setNome(request.getParameter("txtNome"));
+            obj.setPreco(Float.parseFloat(request.getParameter("txtPreco")));
+            obj.setDatapublicacao(StormData.formata(request.getParameter("txtData")));
+            obj.setSinopse(request.getParameter("txtSinopse"));
+            c.setId(Integer.parseInt(request.getParameter("txtCategoria")));
+            e.setCnpj(request.getParameter("txtEditora"));
+            obj.setCategoria(c);
+            obj.setEditora(e);
+            obj.setFoto1(request.getParameter("txtFoto"));
+            obj.setFoto2(request.getParameter("txtFoto2"));
+            obj.setFoto3(request.getParameter("txtFoto3"));
+            List<Autor> listaautores = new ArrayList<>();
+            for (String id : autoresid) {
+                Integer idinteger = Integer.parseInt(id);
+                listaautores.add(adao.buscarPorChavePrimaria(idinteger));
+            }
+            obj.setAutorList(listaautores);
+            Boolean resultado = dao.alterar(obj);
+            if(resultado){
             msg = "Registro alterado com sucesso";
             classe = "alert-success";
-        }
-        else{
-            msg = "Não foi possível alterar";
-            classe = "alert-danger";
-        }
+            }
+    else{
+        msg = "Não foi possível alterar";
+        classe = "alert-danger";
+    }
+        
         
     }else{
         //e GET
@@ -67,6 +81,8 @@ String classe = "";
             return;
         } 
     }
+   
+    dao.fecharConexao();
 %>
 <div class="row">
     <div class="col-lg-12">
@@ -104,38 +120,41 @@ String classe = "";
                     </div>
                     <div class="form-group">
                         <label>Nome</label>
-                        <input class="form-control" type="text"  name="txtNome"  required />
+                        <input class="form-control" type="text"  name="txtNome"  required value="<%=obj.getNome()%>"/>
                     </div>
                     <div class="form-group">
                         <label>Preco: </label>
-                        <input class="form-control" type="text"  name="txtPreco"  required />
+                        <input class="form-control" type="text"  name="txtPreco"  required value="<%=obj.getPreco()%>"/>
                     </div>
                     <div class="form-group">
                         <label>Data de Publicação: </label>
-                        <input class="form-control" type="text"  name="txtData"  required />
+                        <input class="form-control" type="text"  name="txtData"  required value="<%=obj.getDatapublicacao()%>"/>
                     </div>
                     <div class="form-group">
                         <label>Sinopse: </label>
-                        <input class="form-control" type="text"  name="txtSinopse"  required />
+                        <input class="form-control" type="text"  name="txtSinopse"  required value="<%=obj.getSinopse()%>"/>
                     </div>
                     <div class="form-group">
                         <label> Categoria: </label>
-                        <select name="txtCategoria"  required />
-                        <%
-                           for (Categoria item : clistar) {
-                               
-                         %>
+                        <select name="txtCategoria"  required >
+                        
+                        <% 
+                            for (Categoria item : clistar) {
+                         %>      
+                         
+                      
                          <option value = "<%=item.getId()%>">
                              <%=item.getNome()%>
                          </option>
                          <%
                              }
                          %>
+                         
                         </select>
                     </div>
                              <div class="form-group">
                         <label> Editora: </label>
-                        <select name="txtEditora"  required />
+                        <select name="txtEditora"  required>
                         <%
                            for (Editora item : elistar) {
                                
@@ -148,17 +167,27 @@ String classe = "";
                          %>
                         </select>
                     </div>
+                        </div>
+                        <div class="form-group">
+                        <label> Autores: </label>
+                        <%
+                           for (Autor item : alistar) {
+                               
+                         %>
+                         <input type="checkbox" name="autores"  required value = "<%=item.getId()%>"><%=item.getNome()%>
+                         <%}%>
+                    </div>
                     <div class="form-group">
                         <label>Foto: </label>
-                        <input class="form-control" type="file"  name="txtFoto"  required />
+                        <input class="" type="file"  name="txtFoto"  required value="<%=obj.getFoto1()%>"/>
                     </div>
                     <div class="form-group">
                         <label>Foto 2: </label>
-                        <input class="form-control" type="file"  name="txtFoto2"  required />
+                        <input class="" type="file"  name="txtFoto2"  required value="<%=obj.getFoto2()%>"/>
                     </div>
                     <div class="form-group">
                         <label>Foto 3: </label>
-                        <input class="form-control" type="file"  name="txtFoto3"  required />
+                        <input class="" type="file"  name="txtFoto3"  required value="<%=obj.getFoto3()%>"/>
                     </div>
 
 

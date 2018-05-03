@@ -31,7 +31,8 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "livro")
 @NamedQueries({
-    @NamedQuery(name = "Livro.findAll", query = "SELECT l FROM Livro l")})
+    @NamedQuery(name = "Livro.findAll", query = "SELECT l FROM Livro l"),
+    @NamedQuery(name = "Livro.findFilter", query = "SELECT l FROM Livro l WHERE l.nome=:filtro")})
 public class Livro implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -59,8 +60,8 @@ public class Livro implements Serializable {
     @Column(name = "sinopse")
     private String sinopse;
     @JoinTable(name = "autor_livro", joinColumns = {
-        @JoinColumn(name = "autor", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "livro", referencedColumnName = "id")})
+        @JoinColumn(name = "livro", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "autor", referencedColumnName = "id")})
     @ManyToMany
     private List<Autor> autorList;
     @JoinColumn(name = "categoria", referencedColumnName = "id")
@@ -194,7 +195,7 @@ public class Livro implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.Livro[ id=" + id + " ]";
+        return nome;
     }
     
 }

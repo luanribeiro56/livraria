@@ -1,3 +1,4 @@
+<%@page import="util.StormData"%>
 <%@page import="java.util.List"%>
 <%@page import="modelo.Livro"%>
 <%@page import="dao.LivroDAO"%>
@@ -92,12 +93,12 @@
                         <td><%=item.getNome() %></td>
                         <td><%=item.getPreco()%></td>
                         <td><%=item.getEditora()%></td>
-                        <td><%=item.getDataPublicacao()%></td>
+                        <td><%=StormData.formata(item.getDatapublicacao())%></td>
                         <td><%=item.getCategoria()%></td>
                         <td><%=item.getEditora()%></td>
-                        <td><img src = "../arquivos/<%=item.getImg1()%>" width="100" height = "80" /></td>
-                        <td><img src = "../arquivos/<%=item.getImg2()%>" width="100" height = "80" /></td>
-                        <td><img src = "../arquivos/<%=item.getImg3()%>" width="100" height = "80" /></td>
+                        <td><img src = "../arquivos/<%=item.getFoto1()%>" width="100" height = "80" /></td>
+                        <td><img src = "../arquivos/<%=item.getFoto2()%>" width="100" height = "80" /></td>
+                        <td><img src = "../arquivos/<%=item.getFoto3()%>" width="100" height = "80" /></td>
                         <td><a href="upd.jsp?Id=<%=item.getId()%>" class="btn  btn-primary btn-sm">Alterar</a>
                             <button class="btn  btn-danger btn-sm" data-toggle="modal" data-target="#myModal" onclick="codigo=<%=item.getId()%>">Excluir</button>  
                         </td>
