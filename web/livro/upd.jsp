@@ -15,6 +15,7 @@
 <%
 String msg ="";
 String classe = "";
+String selecionado;
     
     LivroDAO dao = new LivroDAO();
     Livro obj = new Livro();
@@ -64,7 +65,7 @@ String classe = "";
     }
     else{
         //e GET
-        if(request.getParameter("Id") == null){
+        if(request.getParameter("id") == null){
             response.sendRedirect("index.jsp");
             return;
         }
@@ -129,7 +130,7 @@ String classe = "";
                     </div>
                     <div class="form-group">
                         <label>Data de Publicação: </label>
-                        <input class="form-control" type="text"  name="txtData"  required value="<%=obj.getDatapublicacao()%>"/>
+                        <input class="form-control" type="text"  name="txtData"  required value="<%=StormData.formata(obj.getDatapublicacao())%>"/>
                     </div>
                     <div class="form-group">
                         <label>Sinopse: </label>
@@ -141,7 +142,7 @@ String classe = "";
                         
                         <% 
                             for (Categoria item : categorias) {
-                                String selecionado;
+                             
                                 if (obj.getCategoria().getId() == item.getId()) 
                                 {
                                     selecionado = "selected";
@@ -167,14 +168,14 @@ String classe = "";
                         <select name="txtEditora"  required>
                         <%
                            for (Editora item : editoras) {
-                               String selecionado1;
+                              
                                if(obj.getEditora().getCnpj() == item.getCnpj())
                                {
-                                   selecionado1 = "selected";
+                                   selecionado = "selected";
                                }
                                else
                                {
-                                   selecionado1 = "";
+                                   selecionado = "";
                                }
                                    
                          %>
@@ -191,14 +192,14 @@ String classe = "";
                         <label> Autores: </label>
                         <%
                            for (Autor item : autores) {
-                               String selecionado2;
+                               
                                if(obj.getAutorList().contains(item))
                                {
-                                   selecionado2 = "checked";
+                                   selecionado = "checked";
                                }
                                else
                                {
-                                   selecionado2 = "";
+                                   selecionado = "";
                                }
                          %>
                          <input type="checkbox" name="autores"  required value = "<%=item.getId()%>"><%=item.getNome()%>
@@ -217,7 +218,7 @@ String classe = "";
                     <div class="form-group">
                         <label>Foto 3: </label>
                         <input class="" type="file"  name="txtFoto3" id="txtFoto3"  accept="image/*"/>
-                        <img src="../arquivos/<%=obj.getFoto3()%>" id="img1"/>
+                        <img src="../arquivos/<%=obj.getFoto3()%>" id="img3"/>
                     </div>
 
 
@@ -247,5 +248,11 @@ String classe = "";
     
     $("#arquivo1").change(function(){
         readURL(this,"img1");
+    });
+    $("#arquivo2").change(function(){
+        readURL(this,"img2");
+    });
+    $("#arquivo3").change(function(){
+        readURL(this,"img3");
     });
 </script>

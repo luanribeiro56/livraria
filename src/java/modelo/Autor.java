@@ -31,6 +31,12 @@ import javax.persistence.Table;
     @NamedQuery(name = "Autor.findFilter", query = "SELECT a FROM Autor a WHERE a.nome=:filtro")})
 public class Autor implements Serializable {
 
+    @JoinTable(name = "autor_livro", joinColumns = {
+        @JoinColumn(name = "autor", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "livro", referencedColumnName = "id")})
+    @ManyToMany
+    private List<Livro> livroLista;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,7 +54,7 @@ public class Autor implements Serializable {
     private Character sexo;
     @Column(name = "foto")
     private String foto;
-    @ManyToMany(mappedBy = "AutorList")
+    @ManyToMany(mappedBy = "autorList")
     private List<Livro> livroList;
 
     public Autor() {
@@ -106,11 +112,11 @@ public class Autor implements Serializable {
     }
 
     public List<Livro> getLivroList() {
-        return livroList;
+        return livroLista;
     }
 
     public void setLivroList(List<Livro> livroList) {
-        this.livroList = livroList;
+        this.livroLista = livroList;
     }
 
     @Override
