@@ -7,7 +7,6 @@ package modelo;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,8 +14,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -26,13 +23,12 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author Aluno
+ * @author Luan
  */
 @Entity
 @Table(name = "livro")
 @NamedQueries({
-    @NamedQuery(name = "Livro.findAll", query = "SELECT l FROM Livro l"),
-    @NamedQuery(name = "Livro.findFilter", query = "SELECT l FROM Livro l WHERE l.nome=:filtro")})
+    @NamedQuery(name = "Livro.findAll", query = "SELECT l FROM Livro l")})
 public class Livro implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,22 +44,18 @@ public class Livro implements Serializable {
     @Column(name = "preco")
     private float preco;
     @Basic(optional = false)
-    @Column(name = "datapublicacao")
+    @Column(name = "data_publicacao")
     @Temporal(TemporalType.DATE)
-    private Date datapublicacao;
-    @Column(name = "foto1")
-    private String foto1;
-    @Column(name = "foto2")
-    private String foto2;
-    @Column(name = "foto3")
-    private String foto3;
+    private Date dataPublicacao;
+    @Basic(optional = false)
     @Column(name = "sinopse")
     private String sinopse;
-    @JoinTable(name = "autor_livro", joinColumns = {
-        @JoinColumn(name = "livro", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "autor", referencedColumnName = "id")})
-    @ManyToMany
-    private List<Autor> autorList;
+    @Column(name = "img1")
+    private String img1;
+    @Column(name = "img2")
+    private String img2;
+    @Column(name = "img3")
+    private String img3;
     @JoinColumn(name = "categoria", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Categoria categoria;
@@ -78,11 +70,12 @@ public class Livro implements Serializable {
         this.id = id;
     }
 
-    public Livro(Integer id, String nome, float preco, Date datapublicacao) {
+    public Livro(Integer id, String nome, float preco, Date dataPublicacao, String sinopse) {
         this.id = id;
         this.nome = nome;
         this.preco = preco;
-        this.datapublicacao = datapublicacao;
+        this.dataPublicacao = dataPublicacao;
+        this.sinopse = sinopse;
     }
 
     public Integer getId() {
@@ -109,36 +102,12 @@ public class Livro implements Serializable {
         this.preco = preco;
     }
 
-    public Date getDatapublicacao() {
-        return datapublicacao;
+    public Date getDataPublicacao() {
+        return dataPublicacao;
     }
 
-    public void setDatapublicacao(Date datapublicacao) {
-        this.datapublicacao = datapublicacao;
-    }
-
-    public String getFoto1() {
-        return foto1;
-    }
-
-    public void setFoto1(String foto1) {
-        this.foto1 = foto1;
-    }
-
-    public String getFoto2() {
-        return foto2;
-    }
-
-    public void setFoto2(String foto2) {
-        this.foto2 = foto2;
-    }
-
-    public String getFoto3() {
-        return foto3;
-    }
-
-    public void setFoto3(String foto3) {
-        this.foto3 = foto3;
+    public void setDataPublicacao(Date dataPublicacao) {
+        this.dataPublicacao = dataPublicacao;
     }
 
     public String getSinopse() {
@@ -149,12 +118,28 @@ public class Livro implements Serializable {
         this.sinopse = sinopse;
     }
 
-    public List<Autor> getAutorList() {
-        return autorList;
+    public String getImg1() {
+        return img1;
     }
 
-    public void setAutorList(List<Autor> autorList) {
-        this.autorList = autorList;
+    public void setImg1(String img1) {
+        this.img1 = img1;
+    }
+
+    public String getImg2() {
+        return img2;
+    }
+
+    public void setImg2(String img2) {
+        this.img2 = img2;
+    }
+
+    public String getImg3() {
+        return img3;
+    }
+
+    public void setImg3(String img3) {
+        this.img3 = img3;
     }
 
     public Categoria getCategoria() {
@@ -195,7 +180,7 @@ public class Livro implements Serializable {
 
     @Override
     public String toString() {
-        return nome;
+        return "modelo.Livro[ id=" + id + " ]";
     }
     
 }

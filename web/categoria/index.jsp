@@ -14,8 +14,8 @@
     } else{ 
    
     //verifico se é excluir
-        if(request.getParameter("codigo") != null){
-            Categoria obj = dao.buscarPorChavePrimaria(Integer.parseInt(request.getParameter("codigo")));
+        if(request.getParameter("Id") != null){
+            Categoria obj = dao.buscarPorChavePrimaria(Integer.parseInt(request.getParameter("Id")));
             if(obj != null){
                 dao.excluir(obj);
             }
@@ -24,7 +24,7 @@
         lista = dao.listar();
     }
     
-    
+    dao.fecharConexao();
 
 %>
 
@@ -85,7 +85,7 @@
                         <td><%=item.getId()%></td>
                         <td><%=item.getNome() %></td>
                         <td><a href="upd.jsp?Id=<%=item.getId()%>" class="btn  btn-primary btn-sm">Alterar</a>
-                            <button class="btn  btn-danger btn-sm" data-toggle="modal" data-target="#myModal" onclick="codigo=<%=item.getId()%>">Excluir</button>  
+                            <button class="btn  btn-danger btn-sm" data-toggle="modal" data-target="#myModal" onclick="Id=<%=item.getId()%>">Excluir</button>  
                         </td>
                     </tr>
                     <% } %>

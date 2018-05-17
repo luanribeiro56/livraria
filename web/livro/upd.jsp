@@ -21,15 +21,12 @@ String classe = "";
     
     
     CategoriaDAO cdao = new CategoriaDAO();
-    List<Categoria> clistar = cdao.listar();
     Categoria c = new Categoria();
 
     EditoraDAO edao = new EditoraDAO();
-    List<Editora> elistar = edao.listar();
     Editora e = new Editora();
     
     AutorDAO adao = new AutorDAO();
-    List<Autor> alistar = adao.listar();
     
     //verifica se é postm ou seja, quer alterar
    if(request.getMethod().equals("POST")){
@@ -46,7 +43,7 @@ String classe = "";
             e.setCnpj(request.getParameter("txtEditora"));
             obj.setCategoria(c);
             obj.setEditora(e);
-            obj.setFoto1(request.getParameter("txtFoto"));
+            obj.setFoto1(request.getParameter("txtFoto1"));
             obj.setFoto2(request.getParameter("txtFoto2"));
             obj.setFoto3(request.getParameter("txtFoto3"));
             List<Autor> listaautores = new ArrayList<>();
@@ -57,23 +54,22 @@ String classe = "";
             obj.setAutorList(listaautores);
             Boolean resultado = dao.alterar(obj);
             if(resultado){
-            msg = "Registro alterado com sucesso";
+                msg = "Registro alterado com sucesso";
             classe = "alert-success";
             }
-    else{
-        msg = "Não foi possível alterar";
-        classe = "alert-danger";
+            else{
+                msg = "Não foi possível alterar";
+                classe = "alert-danger";
+            }
     }
-        
-        
-    }else{
+    else{
         //e GET
         if(request.getParameter("Id") == null){
             response.sendRedirect("index.jsp");
             return;
         }
         
-        dao = new LivroDAO();
+        
         obj = dao.buscarPorChavePrimaria(Integer.parseInt(request.getParameter("Id")));
         
         if(obj == null){
@@ -82,7 +78,12 @@ String classe = "";
         } 
     }
    
+    List<Autor> autores = adao.listar();
+    List<Editora> editoras = edao.listar();
+    List<Categoria> categorias = cdao.listar();
+    
     dao.fecharConexao();
+    
 %>
 <div class="row">
     <div class="col-lg-12">
@@ -132,14 +133,23 @@ String classe = "";
                     </div>
                     <div class="form-group">
                         <label>Sinopse: </label>
-                        <input class="form-control" type="text"  name="txtSinopse"  required value="<%=obj.getSinopse()%>"/>
-                    </div>
+                        <textarea class="form-control" name="txtSinopse"><%=obj.getSinopse()%>"/></textarea>
+                    </div> 
                     <div class="form-group">
                         <label> Categoria: </label>
                         <select name="txtCategoria"  required >
                         
                         <% 
-                            for (Categoria item : clistar) {
+                            for (Categoria item : categorias) {
+                                String selecionado;
+                                if (obj.getCategoria().getId() == item.getId()) 
+                                {
+                                    selecionado = "selected";
+                                }
+                                else
+                                {
+                                    selecionado = "";
+                                }
                          %>      
                          
                       
@@ -156,8 +166,17 @@ String classe = "";
                         <label> Editora: </label>
                         <select name="txtEditora"  required>
                         <%
-                           for (Editora item : elistar) {
-                               
+                           for (Editora item : editoras) {
+                               String selecionado1;
+                               if(obj.getEditora().getCnpj() == item.getCnpj())
+                               {
+                                   selecionado1 = "selected";
+                               }
+                               else
+                               {
+                                   selecionado1 = "";
+                               }
+                                   
                          %>
                          <option value = "<%=item.getCnpj()%>">
                              <%=item.getNome()%>
@@ -171,23 +190,34 @@ String classe = "";
                         <div class="form-group">
                         <label> Autores: </label>
                         <%
-                           for (Autor item : alistar) {
-                               
+                           for (Autor item : autores) {
+                               String selecionado2;
+                               if(obj.getAutorList().contains(item))
+                               {
+                                   selecionado2 = "checked";
+                               }
+                               else
+                               {
+                                   selecionado2 = "";
+                               }
                          %>
                          <input type="checkbox" name="autores"  required value = "<%=item.getId()%>"><%=item.getNome()%>
                          <%}%>
                     </div>
                     <div class="form-group">
                         <label>Foto: </label>
-                        <input class="" type="file"  name="txtFoto"  required value="<%=obj.getFoto1()%>"/>
+                        <input class="" type="file"  name="txtFoto1" id="txtFoto1"  accept="image/*"/>
+                        <img src="../arquivos/<%=obj.getFoto1()%>" id="img1"/>
                     </div>
                     <div class="form-group">
                         <label>Foto 2: </label>
-                        <input class="" type="file"  name="txtFoto2"  required value="<%=obj.getFoto2()%>"/>
+                        <input class="" type="file"  name="txtFoto2" id="txtFoto2"  accept="image/*"/>
+                        <img src="../arquivos/<%=obj.getFoto2()%>" id="img2"/>
                     </div>
                     <div class="form-group">
                         <label>Foto 3: </label>
-                        <input class="" type="file"  name="txtFoto3"  required value="<%=obj.getFoto3()%>"/>
+                        <input class="" type="file"  name="txtFoto3" id="txtFoto3"  accept="image/*"/>
+                        <img src="../arquivos/<%=obj.getFoto3()%>" id="img1"/>
                     </div>
 
 
@@ -202,3 +232,20 @@ String classe = "";
 </div>
 <!-- /.row -->
 <%@include file="../rodape.jsp" %>
+<script>
+    function readURL(input,destino) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                $('#'+destino).attr('src', e.target.result);
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+    $("#arquivo1").change(function(){
+        readURL(this,"img1");
+    });
+</script>
